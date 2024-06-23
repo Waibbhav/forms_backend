@@ -1,36 +1,71 @@
-import { Controller, Post ,Get, Body, HttpException, HttpStatus} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  HttpException,
+  HttpStatus,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserCreate } from './dto';
 
 @Controller('user')
 export class UserController {
-    constructor(private userService: UserService) { }
-    
-    @Get("get/:id")
-    getUser() {
-        
-    
-    }    
+  constructor(private userService: UserService) {}
 
-    @Post("create")
-    async createUser(@Body() body:UserCreate) {
-    try {
-      const createdUser = await this.userService.userCreate(body);
-      return createdUser; // Return the created user data
+  @Get('get/:id')
+  getUser() {}
+
+  @Get('get')
+ async getAllUser(@Req() req: any, @Res() res: any) {
+         const result = await this.userService.getAll(req.query);
+      if (result.success) {
+        res.status(HttpStatus.CREATED).json({
+          data: result.data,
+          message: result.message,
+        });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          data: result.data,
+          message: result.message,
+        });
+      }
     } catch (error) {
-      // Handle potential errors (e.g., database errors, validation errors)
-      throw new HttpException(error.message || 'Unexpected error creating user', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error.message || 'Unexpected error creating user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  
+
+  @Post('create')
+  async createUser(@Body() body: UserCreate, @Req() req: any, @Res() res: any) {
+    try {
+      const result = await this.userService.userCreate(body);
+      if (result.success) {
+        res.status(HttpStatus.CREATED).json({
+          data: result.data,
+          message: result.message,
+        });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          data: result.data,
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Unexpected error creating user',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
-    
 
-    @Post("update")
-    updateUser() {
-        
-    }
+  @Post('update')
+  updateUser() {}
 
-    @Post("delete")
-    deleteUser() {
-        
-    }
+  @Post('delete')
+  deleteUser() {}
 }

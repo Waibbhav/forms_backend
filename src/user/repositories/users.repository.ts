@@ -134,6 +134,36 @@ export class UserRepository {
         }
     }
 
+
+   async getAll(req:any) {
+       try {
+           
+           
+              let aggregate = this.userModel.aggregate([
+                {
+                  $match: {
+                    isDeleted: { $eq: false },
+                  },
+                },
+              ]);
+           
+               const options = {
+                 page: req.page ? req.page : 1,
+                 limit: req.length ? req.length :10,
+               };
+               const allUsers = await this.userModelPaginated.aggregatePaginate(
+                 aggregate,
+                 options,
+               );
+           
+           console.log(allUsers);
+           
+       return allUsers;
+       } catch(e) {
+           return e
+        }
+     
+    }
   
 
    

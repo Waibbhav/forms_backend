@@ -138,4 +138,35 @@ export class UserService {
       };
     }
   }
+
+    async getAll(req:any): Promise<any> {
+        try {
+            let userData = await this.userRepo.getAll(req);
+            console.log(req);
+            
+          if (userData ) {
+            return {
+              success: true,
+              type: 'success',
+              data: userData,
+              message: 'User details fetched successfully!',
+            };
+          } else {
+            return {
+              success: false,
+              type: 'error',
+              data: null,
+              message: 'Something Went Wrong.. No User Found!',
+            };
+          }
+        } catch (error) {
+          console.error(error);
+          return {
+            success: false,
+            type: 'error',
+            data: null,
+            message: error.message,
+          };
+        }
+  }
 }
