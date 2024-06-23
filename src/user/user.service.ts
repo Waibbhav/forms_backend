@@ -142,14 +142,12 @@ export class UserService {
     async getAll(req:any): Promise<any> {
         try {
             let userData = await this.userRepo.getAll(req);
-            console.log(req);
-            
           if (userData ) {
             return {
               success: true,
               type: 'success',
               data: userData,
-              message: 'User details fetched successfully!',
+              message: 'all users fetched successfully!',
             };
           } else {
             return {
