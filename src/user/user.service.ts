@@ -7,7 +7,7 @@ import { UpdateUser, UserCreate } from './dto';
 export class UserService {
   constructor(private userRepo: UserRepository) {}
 
-  async userCreate(body: UserCreate, files: any): Promise<any> {
+  async userCreate(body: UserCreate): Promise<any> {
     try {
       body.email = body.email.toLowerCase().trim();
 

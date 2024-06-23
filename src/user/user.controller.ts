@@ -1,5 +1,6 @@
-import { Controller, Post ,Get} from '@nestjs/common';
+import { Controller, Post ,Get, Body, HttpException, HttpStatus} from '@nestjs/common';
 import { UserService } from './user.service';
+import { UserCreate } from './dto';
 
 @Controller('user')
 export class UserController {
@@ -12,9 +13,16 @@ export class UserController {
     }    
 
     @Post("create")
-    createUser() {
-        
+    async createUser(@Body() body:UserCreate) {
+    try {
+      const createdUser = await this.userService.userCreate(body);
+      return createdUser; // Return the created user data
+    } catch (error) {
+      // Handle potential errors (e.g., database errors, validation errors)
+      throw new HttpException(error.message || 'Unexpected error creating user', HttpStatus.BAD_REQUEST);
     }
+  }
+    
 
     @Post("update")
     updateUser() {
