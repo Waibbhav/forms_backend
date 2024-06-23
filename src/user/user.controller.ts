@@ -17,7 +17,27 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('get/:id')
-  getUser() {}
+  async getUser(@Req() req: any, @Res() res: any) {
+    try {
+      const result = await this.userService.userDetails(req.params.id);
+      if (result.success) {
+        res.status(HttpStatus.OK).json({
+          data: result.data,
+          message: result.message,
+        });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          data: result.data,
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Unexpected error creating user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 
   @Get('get')
   async getAllUser(@Req() req: any, @Res() res: any) {
@@ -88,29 +108,25 @@ export class UserController {
   }
 
   @Delete('delete/:id')
-  async deleteUser(
-    @Body() body: UpdateUser,
-    @Req() req: any,
-    @Res() res: any,
-  ) {
-      try {
-          const result = await this.userService.deleteUser(req.params.id);
-          if (result.success) {
-            res.status(HttpStatus.OK).json({
-              data: result.data,
-              message: result.message,
-            });
-          } else {
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-              data: result.data,
-              message: result.message,
-            });
-          }
-        } catch (error) {
-          throw new HttpException(
-            error.message || 'Unexpected error creating user',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
+  async deleteUser(@Body() body: UpdateUser, @Req() req: any, @Res() res: any) {
+    try {
+      const result = await this.userService.deleteUser(req.params.id);
+      if (result.success) {
+        res.status(HttpStatus.OK).json({
+          data: result.data,
+          message: result.message,
+        });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          data: result.data,
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Unexpected error creating user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

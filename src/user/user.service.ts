@@ -115,7 +115,7 @@ export class UserService {
         _id: id,
         isDeleted: false,
       });
-      if (userDetails && userDetails.length) {
+      if (userDetails && userDetails._id) {
         return {
           success: true,
           type: 'success',
