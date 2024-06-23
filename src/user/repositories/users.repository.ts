@@ -137,13 +137,31 @@ export class UserRepository {
 
    async getAll(req:any) {
        try {
+         let conditions ={}
+           let and_clauses = []
+             and_clauses.push({ isDeleted: false });
+           if (req.search) {
+               and_clauses.push({
+              $or: [
+                {
+                  name: {
+                    $regex: req.search.trim(),
+                    $options: 'i',
+                  },
+                },
+                {
+                  email: {
+                    $regex: '^' + req.search.trim(),
+                    $options: 'i',
+                  },
+                },
+              ],
+            });}
            
-           
+           conditions['$and'] = and_clauses;
               let aggregate = this.userModel.aggregate([
                 {
-                  $match: {
-                    isDeleted: { $eq: false },
-                  },
+                  $match:  conditions,
                 },
               ]);
            
@@ -154,10 +172,7 @@ export class UserRepository {
                const allUsers = await this.userModelPaginated.aggregatePaginate(
                  aggregate,
                  options,
-               );
-           
-           console.log(allUsers);
-           
+               );   
        return allUsers;
        } catch(e) {
            return e
