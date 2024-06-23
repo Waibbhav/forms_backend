@@ -73,7 +73,7 @@ export class UserService {
   async deleteUser(id: any): Promise<any> {
     try {
       id = new mongoose.Types.ObjectId(id);
-      const userDetails = await this.userRepo.getById(id);
+      const userDetails = await this.userRepo.getByField({_id:id , isDeleted:false});
       if (!userDetails) {
         return {
           success: false,
@@ -89,13 +89,15 @@ export class UserService {
       );
       if (updateUser && updateUser._id) {
         return {
-          success: true,
+            success: true,
+          data:updateUser,
           type: 'success',
           message: 'Account deleted successfully!',
         };
       } else {
         return {
-          success: false,
+         success: false,
+          data:updateUser,
           type: 'error',
           message: 'Something Went Wrong!',
         };
