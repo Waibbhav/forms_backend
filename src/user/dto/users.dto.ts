@@ -6,7 +6,7 @@ export class UserCreate {
 
     @IsString()
     @IsNotEmpty()
-    name: string;
+    fullName: string;
 
     @IsString()
     phone: string;
@@ -22,7 +22,7 @@ export class UpdateUser {
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  fullName: string;
 
   @IsString()
   @IsNotEmpty()

@@ -8,7 +8,7 @@ export type UserDocument = mongoose.HydratedDocument<User>;
 @Schema({ timestamps: true, versionKey: false })
 export class User {
   @Prop({ type: String, default: '', index: true })
-  name: string;
+  fullName: string;
 
   @Prop({ type: String, default: '', index: true })
   phone: string;
